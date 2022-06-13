@@ -232,4 +232,7 @@ return [
 
     ],
 
+    'coinapi_endpoint' => env('coinapi_endpoint', ''),
+    'coinapi_key' => env('coinapi_key', ''),
+
 ];
