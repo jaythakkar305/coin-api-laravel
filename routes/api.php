@@ -20,3 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::resource('/coinapi', CoinApiController::class);
+
+//Route::resource('/allcoins', CoinApiController::class);
+Route::get('/allcoins/{page}', [CoinApiController::class, 'coinlist']);
+
+// Route::resource('/coinapi', CoinApiController::class);

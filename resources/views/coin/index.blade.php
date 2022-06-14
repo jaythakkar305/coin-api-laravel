@@ -11,7 +11,7 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        Coin
+                                        Name
                                     </th>
                                     <th>
                                         Exchange
@@ -22,22 +22,24 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($coins as $coin)
+                                @foreach($coins as $coin)                                
                                 <tr>
-                                    <td class="py-1">
+                                    <td class="">
                                         {{ $coin->name }}
                                     </td>
-                                    <td class="py-1">
+                                    <td class="">
                                         {{ $coin->exchange_id }}
                                     </td>
-                                    <td class="py-1">
+                                    <td class="">
                                         {{ $coin->website }}
                                     </td>                                    
                                 </tr>
                                 @endforeach                                                       
                             </tbody>
                         </table>
-                        {{ $coins->links() }}
+                        <div class="text-center m-3">
+                            {{ $coins->links() }}
+                        </div>                        
                     </div>
                 </div>
             </div>

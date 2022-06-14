@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Coin;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 
 class CoinController extends Controller
 {
@@ -18,14 +22,20 @@ class CoinController extends Controller
     public function index(Request $request1)
     {
         try {
-
-            $coins = Coin::paginate(10);
+            // $coins = Coin::paginate($request1->all());
+            // dd($coins);
+            
+            $client = new \GuzzleHttp\Client();
+            $request = $client->get(url('/api/allcoins/'.$request1->input('page', 1)));
+            $response = $request->getBody()->getContents();            
+            $coins = collect(json_decode($response));
+            dd($coins);
+            $coins = $this->paginate($coins->get('data'),10,$request1->page);
+            
+            //$coins = Paginator::make($coins, count($coins), 10);
             return view('coin.index', compact('coins'));
-            // $showEmployeeData = DB::table('employees')->paginate(4); //Query Builder
-
-            // $showEmployeeData = Employee::paginate(4); //Eloquent ORM
-
-            // return view('Employee.view', compact('showEmployeeData'));
+            
+            
             // $client = new \GuzzleHttp\Client();
             // $request = $client->get(url('/api/coinapi'));
             // $response = $request->getBody()->getContents();
@@ -38,5 +48,12 @@ class CoinController extends Controller
         } catch (\Exception $e) {
             // return view('error', ['error' => 'Uh oh! ' . $e->getMessage()]);
         }
+    }
+
+    public function paginate($items, $perPage = 5, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }
